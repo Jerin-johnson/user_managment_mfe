@@ -1,10 +1,17 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
+import Header from "./components/Header";
+// import DashboardHeader from "./components/DashboardHeader";
+// import Footer from "./components/Footer";
 
-const App = () => {
+const App: React.FC = () => {
   return (
-    <div style={{ border: "2px solid blue", padding: "10px" }}>
-      <h2>Auth Micro Frontend</h2>
-      <button>Login</button>
+    <div className="shell-app min-h-screen bg-[#080a12] flex flex-col">
+      <Header />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      {/* <Footer /> */}
     </div>
   );
 };
