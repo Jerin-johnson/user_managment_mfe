@@ -8,7 +8,7 @@ interface NavLink {
 
 const NAV_LINKS: NavLink[] = [
   { label: "Home", to: "/" },
-  { label: "User Dashboard", to: "/users" },
+  { label: "User Dashboard", to: "/user/dash" },
   { label: "Admin Dashboard", to: "/roles" },
   // { label: "Permissions", to: "/permissions" },
   { label: "Admin Login", to: "/auth/admin/login" },

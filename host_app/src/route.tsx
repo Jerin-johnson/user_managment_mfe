@@ -3,7 +3,8 @@ import { createBrowserRouter } from "react-router-dom";
 import LandingPageLayout from "./layout/LandingPageLayout";
 import HomePage from "./pages/HomePage";
 
-const AuthRoot = React.lazy(() => import("auth/AuthRoot"));
+const AuthRoot = lazy(() => import("auth/AuthRoot"));
+const UserRoot = lazy(() => import("user/UserRoot"));
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,14 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<div>Loading Auth Module...</div>}>
         <AuthRoot />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/user/*",
+    element: (
+      <Suspense fallback={<div>Loading Auth Module...</div>}>
+        <UserRoot />
       </Suspense>
     ),
   },
