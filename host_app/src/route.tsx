@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 
 const AuthRoot = lazy(() => import("auth/AuthRoot"));
 const UserRoot = lazy(() => import("user/UserRoot"));
+const AdminRoot = lazy(() => import("admin/AdminRoot"));
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,14 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<div>Loading Auth Module...</div>}>
         <UserRoot />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/admin/*",
+    element: (
+      <Suspense fallback={<div>Loading Auth Module...</div>}>
+        <AdminRoot />
       </Suspense>
     ),
   },

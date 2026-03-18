@@ -6,17 +6,17 @@ cd auth_mfe || exit
 npm run start &
 cd ..
 
-# echo ""
-# echo "=== Starting react-child-app ==="
-# cd react-child-app || exit
-# npm run start:s &
-# cd ..
+echo ""
+echo "=== Starting user-app ==="
+cd user_mfe || exit
+npm run start&
+cd ..
 
-# echo ""
-# echo "=== Starting root ==="
-# cd root || exit
-# npm start &
-# cd ..
+echo ""
+echo "=== Starting Admin_App ==="
+cd admin_mfe || exit
+npm start &
+cd ..
 
 echo ""
 echo "=== Starting shell_app ==="
