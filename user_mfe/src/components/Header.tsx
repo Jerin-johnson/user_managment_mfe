@@ -17,7 +17,7 @@ function useAuth() {
     user: {
       name: "Jerin James",
       email: "jerin@acme.com",
-      role: "Admin",
+      role: "user",
       avatarUrl: "",
     },
     logout: () => console.log("logout"),
@@ -91,10 +91,10 @@ const Header: React.FC = () => {
         {/* Nav links */}
         <nav className="hidden md:flex items-center gap-1">
           {[
-            { label: "Dashboard", to: "/" },
-            { label: "Users", to: "/users" },
-            { label: "Roles", to: "/roles" },
-            { label: "Audit Log", to: "/audit" },
+            // { label: "Dashboard", to: "/" },
+            // { label: "Users", to: "/users" },
+            // { label: "Roles", to: "/roles" },
+            // { label: "Audit Log", to: "/audit" },
           ].map(({ label, to }) => (
             <Link
               key={to}
