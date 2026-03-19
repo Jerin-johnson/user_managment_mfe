@@ -88,7 +88,7 @@ export default function LoginForm({
               type="email"
               autoComplete="email"
               {...register("email")}
-              className={`mt-1 block w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 text-white ${
+              className={`mt-1 block w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 text-black ${
                 errors.email
                   ? "border-red-500 focus:border-red-500 focus:ring-red-200"
                   : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-200"
@@ -113,7 +113,7 @@ export default function LoginForm({
               type="password"
               autoComplete="current-password"
               {...register("password")}
-              className={`mt-1 block w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 text-white ${
+              className={`mt-1 block w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 text-black ${
                 errors.password
                   ? "border-red-500 focus:border-red-500 focus:ring-red-200"
                   : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-200"

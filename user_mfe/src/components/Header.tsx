@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import useAuthStore from "shared/useAuthStore";
 
 function getInitials(name: string): string {
   return name
@@ -25,7 +26,7 @@ function useAuth() {
 }
 
 const Header: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, clearUserAuth: logout } = useAuthStore();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 

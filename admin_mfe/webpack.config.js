@@ -64,6 +64,7 @@ module.exports = {
           singleton: true,
           requiredVersion: "6.22.3",
         },
+        zustand: { singleton: true },
       },
     }),
 

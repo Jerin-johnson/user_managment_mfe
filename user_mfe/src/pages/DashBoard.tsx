@@ -1,40 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
-function getGreeting(): string {
-  const h = new Date().getHours();
-  if (h < 12) return "Good morning";
-  if (h < 17) return "Good afternoon";
-  return "Good evening";
-}
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
-
-// 👇 swap with your real useAuth import
-// import { useAuth } from "../context/AuthContext";
-function useAuth() {
-  return {
-    user: {
-      name: "Jerin James",
-      email: "jerin@acme.com",
-      role: "User",
-      avatarUrl: "",
-    },
-  };
-}
+import useAuthStore from "shared/useAuthStore";
+import { getGreeting, getInitials } from "../utils/greeting";
 
 const DashboardPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
+  if (!user) {
+    return <div>Something went wrong user is not here</div>;
+  }
   return (
-    // ✅ No header here — it's already in App.tsx above <Outlet />
     <div className="relative max-w-6xl mx-auto px-6 py-10">
       {/* Glow */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10">

@@ -1,20 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../../components/LoginForm";
-
-// import { loginUser } from '@/services/authService';   ← replace with real call
+import useAuthStore from "shared/useAuthStore";
+// import { loginUser } from '@/services/authService';
 
 export default function UserLogin() {
   const navigate = useNavigate();
-  // const { login } = useAuth();   ← if you use auth context
+  const { isAuthenticated, user, setUser } = useAuthStore();
 
   const handleUserLogin = async (data: { email: string; password: string }) => {
     try {
       // await loginUser(data.email, data.password);
       console.log("User login:", data);
+      setUser({ name: "Jerin Johnson", email: data.email, role: "USER" });
 
-      // Example success flow
-      // await login({ ...userData, role: 'user' });
-      navigate("/dashboard"); // or wherever user goes after login
+      navigate("/user/dash");
     } catch (err: unknown) {
       if (err instanceof Error) {
         if (

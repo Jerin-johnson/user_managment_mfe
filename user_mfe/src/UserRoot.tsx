@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import DashBoard from "./pages/DashBoard";
 import Header from "./components/Header";
 import "./index.css";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 export default function UserRoot() {
   return (
@@ -12,7 +13,9 @@ export default function UserRoot() {
         <Header />
         <main className="flex-1">
           <Routes>
-            <Route path="/dash" element={<DashBoard />} />
+            <Route element={<ProtectedRoute role="USER" />}>
+              <Route path="/dash" element={<DashBoard />} />
+            </Route>
             <Route
               path="*"
               element={

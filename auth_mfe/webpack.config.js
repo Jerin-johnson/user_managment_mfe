@@ -45,6 +45,9 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "auth",
       filename: "remoteEntry.js",
+      remotes: {
+        shared: "shared@http://localhost:3004/remoteEntry.js",
+      },
 
       exposes: {
         "./App": "./src/App",
@@ -65,6 +68,7 @@ module.exports = {
           singleton: true,
           requiredVersion: "6.22.3",
         },
+        zustand: { singleton: true },
       },
     }),
 
