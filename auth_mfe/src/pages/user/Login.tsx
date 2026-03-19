@@ -39,7 +39,7 @@ export default function UserLogin() {
         subtitle="Access your personal account"
         onSubmit={handleUserLogin}
         registerLink="/auth/user/register"
-        // forgotPasswordLink="/auth/user/forgot-password"
+        forgotPasswordLink="/auth/forgot"
       />
     </div>
   );

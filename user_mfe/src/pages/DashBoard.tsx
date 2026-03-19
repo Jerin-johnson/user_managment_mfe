@@ -24,87 +24,48 @@ function useAuth() {
     user: {
       name: "Jerin James",
       email: "jerin@acme.com",
-      role: "Admin",
+      role: "User",
       avatarUrl: "",
     },
   };
 }
 
-interface StatCardProps {
-  label: string;
-  value: string | number;
-  delta?: string;
-  positive?: boolean;
-  icon: React.ReactNode;
-}
-const StatCard: React.FC<StatCardProps> = ({
-  label,
-  value,
-  delta,
-  positive,
-  icon,
-}) => (
-  <div
-    className="flex flex-col gap-3 p-5 rounded-2xl bg-white/[0.03] border border-white/[0.07]
-                  hover:bg-white/[0.05] transition-colors duration-200"
-  >
-    <div className="flex items-center justify-between">
-      <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest">
-        {label}
-      </span>
-      <span className="w-9 h-9 rounded-xl bg-[#5b7cf6]/10 flex items-center justify-center text-[#7b93fa]">
-        {icon}
-      </span>
-    </div>
-    <div>
-      <p className="text-2xl font-bold text-slate-100">{value}</p>
-      {delta && (
-        <p
-          className={`text-xs mt-1 font-medium ${positive ? "text-emerald-400" : "text-red-400"}`}
-        >
-          {positive ? "↑" : "↓"} {delta}
-        </p>
-      )}
-    </div>
-  </div>
-);
-
-const ACTIVITY = [
-  {
-    id: "1",
-    action: "Created user",
-    target: "alice@acme.com",
-    time: "2 min ago",
-    type: "create" as const,
-  },
-  {
-    id: "2",
-    action: "Updated role",
-    target: "bob@acme.com",
-    time: "14 min ago",
-    type: "update" as const,
-  },
-  {
-    id: "3",
-    action: "Deleted user",
-    target: "old@acme.com",
-    time: "1 hr ago",
-    type: "delete" as const,
-  },
-  {
-    id: "4",
-    action: "Login detected",
-    target: "admin@acme.com",
-    time: "3 hr ago",
-    type: "login" as const,
-  },
-];
-const DOT = {
-  create: "bg-emerald-400",
-  update: "bg-[#5b7cf6]",
-  delete: "bg-red-400",
-  login: "bg-amber-400",
-};
+// const ACTIVITY = [
+//   {
+//     id: "1",
+//     action: "Created user",
+//     target: "alice@acme.com",
+//     time: "2 min ago",
+//     type: "create" as const,
+//   },
+//   {
+//     id: "2",
+//     action: "Updated role",
+//     target: "bob@acme.com",
+//     time: "14 min ago",
+//     type: "update" as const,
+//   },
+//   {
+//     id: "3",
+//     action: "Deleted user",
+//     target: "old@acme.com",
+//     time: "1 hr ago",
+//     type: "delete" as const,
+//   },
+//   {
+//     id: "4",
+//     action: "Login detected",
+//     target: "admin@acme.com",
+//     time: "3 hr ago",
+//     type: "login" as const,
+//   },
+// ];
+// const DOT = {
+//   create: "bg-emerald-400",
+//   update: "bg-[#5b7cf6]",
+//   delete: "bg-red-400",
+//   login: "bg-amber-400",
+// };
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -157,7 +118,7 @@ const DashboardPage: React.FC = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      {/* <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard
           label="Total Users"
           value="1,284"
@@ -241,11 +202,10 @@ const DashboardPage: React.FC = () => {
             </svg>
           }
         />
-      </div>
+      </div> */}
 
       {/* Bottom grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Activity */}
+      {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-sm font-semibold text-slate-200">
@@ -280,7 +240,6 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Quick actions */}
         <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6">
           <h2 className="text-sm font-semibold text-slate-200 mb-5">
             Quick actions
@@ -325,7 +284,7 @@ const DashboardPage: React.FC = () => {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

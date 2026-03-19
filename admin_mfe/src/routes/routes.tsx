@@ -3,6 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // import "./index.css";
 import AdminLayoutStandAlone from "../layout/AdminLayoutStandAlone";
 import UsersPage from "../pages/UsersPage";
+import CreateUserPage from "../pages/CreateUserPage";
+import EditUserPage from "../pages/EditUserPage";
 
 // Router config - replaces <Routes>
 const router = createBrowserRouter([
@@ -17,6 +19,14 @@ const router = createBrowserRouter([
       {
         path: "/admin/users",
         element: <UsersPage />,
+      },
+      {
+        path: "/admin/users/create",
+        element: <CreateUserPage />,
+      },
+      {
+        path: "/admin/users/edit",
+        element: <EditUserPage />,
       },
       {
         path: "*",

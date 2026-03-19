@@ -29,7 +29,7 @@ export default function AdminLogin() {
         subtitle="Sign in to manage the system"
         onSubmit={handleAdminLogin}
         registerLink="/auth/admin/register"
-        // forgotPasswordLink="/auth/admin/forgot-password"
+        forgotPasswordLink="/auth/forgot"
       />
     </div>
   );
