@@ -10,6 +10,7 @@ module.exports = {
   devServer: {
     port: 3002,
     hot: true,
+    client: { overlay: false },
     historyApiFallback: {
       index: "/index.html",
     },

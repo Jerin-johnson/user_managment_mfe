@@ -1,31 +1,32 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { MOCK_USERS } from "../mocks/Mock.User.data";
 
 interface User {
-  id: string;
+  id: string | number;
   name: string;
   email: string;
   role: string;
-  status: "active" | "inactive";
-  createdAt: string;
+  status?: "active" | "inactive";
+  createdAt?: string;
 }
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState<User[]>(MOCK_USERS);
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // replace with your actual API call
-    fetch("/api/admin/users")
-      .then((res) => res.json())
-      .then((data) => {
-        setUsers(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+  // useEffect(() => {
+  //   // replace with your actual API call
+  //   fetch("/api/admin/users")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setUsers(data);
+  //       setLoading(false);
+  //     })
+  //     .catch(() => setLoading(false));
+  // }, []);
 
   const filtered = users.filter(
     (u) =>
@@ -93,23 +94,27 @@ export default function UsersPage() {
                   <td className="px-6 py-4">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        user.status === "active"
+                        "active" === "active"
                           ? "bg-green-500/10 text-green-400"
                           : "bg-red-500/10 text-red-400"
                       }`}
                     >
-                      {user.status}
+                      {user.status || "active"}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-gray-400">
-                    {new Date(user.createdAt).toLocaleDateString()}
+                    {/* {new Date(user?.createdAt).toLocaleDateString()} */}
+                    {new Date().toLocaleDateString()}
                   </td>
                   <td
                     className="px-6 py-4"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <button className="text-indigo-400 hover:text-indigo-300 text-xs mr-3">
-                      Edit
+                    <button
+                      className="text-indigo-400 hover:text-indigo-300 text-xs mr-3"
+                      onClick={() => navigate(`/admin/users/${user.id}`)}
+                    >
+                      View
                     </button>
                     <button className="text-red-400 hover:text-red-300 text-xs">
                       Delete

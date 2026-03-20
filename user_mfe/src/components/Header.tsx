@@ -167,7 +167,7 @@ const Header: React.FC = () => {
                     {user?.email}
                   </p>
                 </div>
-                {[
+                {/* {[
                   { label: "Profile", to: "/user/profile" },
                   { label: "Settings", to: "/user/settings" },
                 ].map(({ label, to }) => (
@@ -180,7 +180,7 @@ const Header: React.FC = () => {
                   >
                     {label}
                   </Link>
-                ))}
+                ))} */}
                 <div className="border-t border-white/[0.06]">
                   <button
                     onClick={handleLogout}

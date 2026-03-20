@@ -1,10 +1,14 @@
-import { StrictMode } from "react";
+import React, { StrictMode } from "react";
 import { Routes, Route } from "react-router-dom";
-
+import "./index.css";
 import DashBoard from "./pages/DashBoard";
 import Header from "./components/Header";
-import "./index.css";
 import ProtectedRoute from "./routes/ProtectedRoute";
+const Footer = React.lazy(() =>
+  import("shared/Footer").catch(() => ({
+    default: () => <div>⚠️ User module failed to load</div>,
+  })),
+);
 
 export default function UserRoot() {
   return (
@@ -27,6 +31,7 @@ export default function UserRoot() {
           </Routes>
         </main>
       </div>
+      <Footer />
     </div>
   );
 }

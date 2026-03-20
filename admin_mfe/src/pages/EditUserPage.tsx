@@ -2,23 +2,24 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import UserForm from "../components/UserForm";
-import { User, UserFormData } from "../types/user";
+import { UserFormData } from "../types/user";
 import { getUser, updateUser } from "../service/api/user";
+import { MOCK_USERS, User } from "../mocks/Mock.User.data";
 
 export default function EditUserPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(MOCK_USERS[0]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    getUser(id!).then((u) => {
-      setUser(u);
-      setFetching(false);
-    });
-  }, [id]);
+  // useEffect(() => {
+  //   getUser(id!).then((u) => {
+  //     setUser(u);
+  //     setFetching(false);
+  //   });
+  // }, [id]);
 
   const handleSubmit = async (data: UserFormData) => {
     setLoading(true);
@@ -34,7 +35,7 @@ export default function EditUserPage() {
     }
   };
 
-  if (fetching) return <div className="text-gray-400 p-6">Loading user...</div>;
+  // if (fetching) return <div className="text-gray-400 p-6">Loading user...</div>;
   if (!user) return <div className="text-red-400 p-6">User not found.</div>;
 
   return (
@@ -69,10 +70,10 @@ export default function EditUserPage() {
           initialData={{
             name: user.name,
             email: user.email,
-            phone: user.phone,
-            role: user.role,
-            status: user.status,
-            address: user.address ?? "",
+            phone: "2323232323",
+            role: user.role as "user" | "admin" | "moderator" | undefined,
+            status: user.status || "active",
+            address: "fdfdjfdjfm",
           }}
         />
       </div>

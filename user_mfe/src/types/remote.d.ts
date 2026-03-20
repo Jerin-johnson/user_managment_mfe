@@ -17,3 +17,5 @@ declare module "shared/useAuthStore" {
 
   export default useAuthStore;
 }
+
+declare module "shared/Footer";

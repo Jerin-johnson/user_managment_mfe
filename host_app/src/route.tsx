@@ -2,10 +2,18 @@ import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import LandingPageLayout from "./layout/LandingPageLayout";
 import HomePage from "./pages/HomePage";
+import ProtectedRoute from "./components/protected/ProtectedRoutes";
+import Loading from "./components/Loading";
 
 const AuthRoot = lazy(() => import("auth/AuthRoot"));
-const UserRoot = lazy(() => import("user/UserRoot"));
+// const UserRoot = lazy(() => import("user/UserRoot"));
 const AdminRoot = lazy(() => import("admin/AdminRoot"));
+
+const UserRoot = React.lazy(() =>
+  import("user/UserRoot").catch(() => ({
+    default: () => <div>⚠️ User module failed to load</div>,
+  })),
+);
 
 const router = createBrowserRouter([
   {
@@ -21,26 +29,24 @@ const router = createBrowserRouter([
 
   {
     path: "/auth/*",
-    element: (
-      <Suspense fallback={<div>Loading Auth Module...</div>}>
-        <AuthRoot />
-      </Suspense>
-    ),
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "*",
+        element: <AuthRoot />,
+      },
+    ],
   },
   {
     path: "/user/*",
-    element: (
-      <Suspense fallback={<div>Loading Auth Module...</div>}>
-        <UserRoot />
-      </Suspense>
-    ),
+    element: <UserRoot />,
   },
   {
     path: "/admin/*",
     element: (
-      <Suspense fallback={<div>Loading Auth Module...</div>}>
-        <AdminRoot />
-      </Suspense>
+      // <Suspense fallback={<Loading variant="dots" />}>
+      <AdminRoot />
+      // </Suspense>
     ),
   },
 

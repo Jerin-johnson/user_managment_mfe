@@ -1,22 +1,22 @@
-// admin-mfe/src/pages/UserDetailPage.tsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { User } from "../types/user";
+
 import { getUser, deleteUser } from "../service/api/user";
+import { MOCK_USERS, User } from "../mocks/Mock.User.data";
 
 export default function UserDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(MOCK_USERS[0]);
+  const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    getUser(id!).then((u) => {
-      setUser(u);
-      setLoading(false);
-    });
-  }, [id]);
+  // useEffect(() => {
+  //   getUser(id!).then((u) => {
+  //     setUser(u);
+  //     setLoading(false);
+  //   });
+  // }, [id]);
 
   const handleDelete = async () => {
     if (!confirm(`Delete ${user?.name}? This cannot be undone.`)) return;
@@ -25,8 +25,10 @@ export default function UserDetailPage() {
     navigate("/admin/users");
   };
 
-  if (loading) return <div className="text-gray-400 p-6">Loading user...</div>;
+  // if (loading) return <div className="text-gray-400 p-6">Loading user...</div>;
   if (!user) return <div className="text-red-400 p-6">User not found.</div>;
+
+  console.log("the user is", user);
 
   const InfoRow = ({ label, value }: { label: string; value: string }) => (
     <div className="flex flex-col gap-1">
@@ -49,7 +51,7 @@ export default function UserDetailPage() {
         </button>
         <div className="flex gap-3">
           <button
-            onClick={() => navigate(`/admin/users/${id}/edit`)}
+            onClick={() => navigate(`/admin/users/edit/${id || 1}`)}
             className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm"
           >
             Edit User
@@ -94,12 +96,12 @@ export default function UserDetailPage() {
         {/* Info Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/10">
           <InfoRow label="Email" value={user.email} />
-          <InfoRow label="Phone" value={user.phone} />
-          <InfoRow label="Address" value={user.address ?? ""} />
-          <InfoRow
+          {/* <InfoRow label="Phone" value={user.phone} />
+          <InfoRow label="Address" value={user.address ?? ""} /> */}
+          {/* <InfoRow
             label="Joined"
             value={new Date(user.createdAt).toLocaleDateString()}
-          />
+          /> */}
         </div>
       </div>
     </div>

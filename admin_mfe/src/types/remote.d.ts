@@ -1,15 +1,8 @@
-declare module "auth/Button";
-declare module "auth/App";
-declare module "auth/AuthRoot";
-declare module "user/UserRoot";
-declare module "admin/AdminRoot";
-declare module "shared/Footer";
-
 declare module "shared/useAuthStore" {
   type User = {
     name: string;
     email: string;
-    role: "USER" | "ADMIN";
+    role: string;
     avatarUrl: string;
   };
 
@@ -20,7 +13,11 @@ declare module "shared/useAuthStore" {
     clearUserAuth: () => void;
   };
 
-  const useAuthStore: () => AuthState;
+  // This is the key change:
+  const useAuthStore: {
+    (): AuthState; // `useAuthStore()`
+    <T>(selector: (state: AuthState) => T): T; // `useAuthStore((s) => s.clearUserAuth)`
+  };
 
   export default useAuthStore;
 }

@@ -49,6 +49,7 @@ module.exports = {
       exposes: {
         "./App": "./src/App",
         "./useAuthStore": "./src/store/useAuthStore",
+        "./Footer": "./src/components/Footer",
       },
 
       shared: {

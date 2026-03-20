@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../../components/LoginForm";
+import useAuthStore from "shared/useAuthStore";
 
 // import { loginAdmin } from '@/services/authService';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
+  const { setUser } = useAuthStore();
 
   const handleAdminLogin = async (data: {
     email: string;
@@ -14,8 +16,8 @@ export default function AdminLogin() {
       // await loginAdmin(data.email, data.password);
       console.log("Admin login:", data);
 
-      // Example success flow
-      navigate("/admin/dashboard");
+      setUser({ name: "Jerin Johnson", email: data.email, role: "ADMIN" });
+      navigate("/admin/dash");
     } catch (err: unknown) {
       console.log(err);
       throw new Error("Invalid admin credentials");

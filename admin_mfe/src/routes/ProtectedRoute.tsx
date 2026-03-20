@@ -4,10 +4,8 @@ import useAuthStore from "shared/useAuthStore";
 export default function ProtectedRoute({ role }: { role?: string }) {
   const { isAuthenticated, user } = useAuthStore();
 
-  console.log("The protected  route render", user);
-
   if (!isAuthenticated) {
-    return <Navigate to="/auth/user/login" replace />;
+    return <Navigate to="/auth/admin/login" replace />;
   }
 
   if (role && user?.role !== role) {

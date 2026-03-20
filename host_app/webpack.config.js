@@ -49,6 +49,7 @@ module.exports = {
         auth: "auth@http://localhost:3001/remoteEntry.js",
         user: "user@http://localhost:3002/remoteEntry.js",
         admin: "admin@http://localhost:3003/remoteEntry.js",
+        shared: "shared@http://localhost:3004/remoteEntry.js",
       },
 
       shared: {

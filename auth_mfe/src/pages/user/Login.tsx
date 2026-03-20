@@ -5,7 +5,7 @@ import useAuthStore from "shared/useAuthStore";
 
 export default function UserLogin() {
   const navigate = useNavigate();
-  const { isAuthenticated, user, setUser } = useAuthStore();
+  const { setUser } = useAuthStore();
 
   const handleUserLogin = async (data: { email: string; password: string }) => {
     try {
