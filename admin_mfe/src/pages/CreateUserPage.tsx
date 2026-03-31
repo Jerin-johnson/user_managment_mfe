@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserForm from "../components/UserForm";
 import { UserFormData } from "../types/user";
-import { createUser } from "../service/api/user";
+// import { createUser } from "../service/api/user";
 
 export default function CreateUserPage() {
   const navigate = useNavigate();
@@ -14,8 +14,8 @@ export default function CreateUserPage() {
     setLoading(true);
     setError("");
     try {
-      const user = await createUser(data);
-      navigate(`/admin/users/${user.id}`); // go to detail after create
+      // const user = await createUser(data);
+      // navigate(`/admin/users/${user.id}`); // go to detail after create
     } catch {
       setError("Failed to create user. Please try again.");
       setLoading(false);

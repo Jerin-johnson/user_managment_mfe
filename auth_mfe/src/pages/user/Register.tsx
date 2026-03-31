@@ -1,10 +1,11 @@
-// src/pages/user/UserRegister.tsx
-
 import RegisterForm from "../../components/RegisterForm";
-
-// import { registerUser } from "@/services/authService";  // ← your real API call
+import useAuthStore from "shared/useAuthStore";
+import { registerApi } from "../../services/auth.service";
+import { notify } from "../../notification/toast";
 
 export default function UserRegister() {
+  const { setUser } = useAuthStore();
+
   const handleUserRegister = async (data: {
     name: string;
     email: string;
@@ -17,12 +18,26 @@ export default function UserRegister() {
     console.log(confirmPassword);
 
     try {
-      // await registerUser(registerData);
       console.log("User registration payload:", registerData);
-      // On success → usually redirect to login or auto-login
-    } catch (err: unknown) {
-      throw new Error(
-        err instanceof Error ? err.message : "Registration failed",
+
+      const result = await registerApi({ ...registerData, role: "USER" });
+      console.log("The result is register Api", result);
+
+      notify.success("user register successfully");
+
+      setTimeout(
+        () =>
+          setUser({
+            name: data.name,
+            email: data.email,
+            role: "USER",
+          }),
+        1200,
+      );
+    } catch (err: any) {
+      console.log("the error is", err);
+      notify.error(
+        err?.response?.data?.message || err?.message || "Something went wrong",
       );
     }
   };

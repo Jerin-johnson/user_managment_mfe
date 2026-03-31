@@ -1,28 +1,43 @@
-// import { registerAdmin } from "@/services/authService";
-
+import useAuthStore from "shared/useAuthStore";
 import RegisterForm from "../../components/RegisterForm";
+import { notify } from "../../notification/toast";
+import { registerApi } from "../../services/auth.service";
 
 export default function AdminRegister() {
+  const { setUser } = useAuthStore();
+
   const handleAdminRegister = async (data: {
     name: string;
     email: string;
     password: string;
     confirmPassword: string;
   }) => {
+    // Remove confirmPassword before sending to API
     const { confirmPassword, ...registerData } = data;
 
     console.log(confirmPassword);
 
     try {
-      // await registerAdmin(registerData);
-      console.log("Admin registration payload:", {
-        ...registerData,
-        role: "admin",
-      });
-      // Usually redirect to admin login
-    } catch (err: unknown) {
-      throw new Error(
-        err instanceof Error ? err.message : "Admin registration failed",
+      console.log("User registration payload:", registerData);
+
+      const result = await registerApi({ ...registerData, role: "ADMIN" });
+      console.log("The result is register Api", result);
+
+      notify.success("admin register successfully");
+
+      setTimeout(
+        () =>
+          setUser({
+            name: data.name,
+            email: data.email,
+            role: "ADMIN",
+          }),
+        1200,
+      );
+    } catch (err: any) {
+      console.log("the error is", err);
+      notify.error(
+        err?.response?.data?.message || err?.message || "Something went wrong",
       );
     }
   };

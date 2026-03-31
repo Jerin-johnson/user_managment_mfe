@@ -4,7 +4,6 @@ const path = require("path");
 
 module.exports = {
   entry: "./src/index.tsx",
-
   mode: "development",
 
   devServer: {
@@ -15,6 +14,12 @@ module.exports = {
     },
     static: {
       directory: path.join(__dirname, "public"),
+    },
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "X-Requested-With, content-type, Authorization",
     },
   },
 
@@ -37,7 +42,7 @@ module.exports = {
   },
 
   output: {
-    publicPath: "http://localhost:3000/",
+    publicPath: "auto", // ← This makes it use the current domain
     clean: true,
   },
 
@@ -46,10 +51,10 @@ module.exports = {
       name: "shell",
 
       remotes: {
-        auth: "auth@http://localhost:3001/remoteEntry.js",
-        user: "user@http://localhost:3002/remoteEntry.js",
-        admin: "admin@http://localhost:3003/remoteEntry.js",
-        shared: "shared@http://localhost:3004/remoteEntry.js",
+        auth: "auth@/auth/remoteEntry.js", // ← Relative paths
+        user: "user@/user/remoteEntry.js",
+        admin: "admin@/admin/remoteEntry.js",
+        shared: "shared@/shared/remoteEntry.js",
       },
 
       shared: {

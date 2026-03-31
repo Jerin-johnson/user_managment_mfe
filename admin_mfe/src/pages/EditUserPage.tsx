@@ -3,34 +3,49 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import UserForm from "../components/UserForm";
 import { UserFormData } from "../types/user";
-import { getUser, updateUser } from "../service/api/user";
+// import { getUser, updateUser } from "../service/api/user";
 import { MOCK_USERS, User } from "../mocks/Mock.User.data";
+import { useUserDetailData } from "../hooks/useUsersData";
+import { editUserAPi } from "../service/user.api";
+import { notify } from "../notification/toast";
 
 export default function EditUserPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [user, setUser] = useState<User | null>(MOCK_USERS[0]);
+  // const [user, setUser] = useState<User | null>(MOCK_USERS[0]);
   const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
   const [error, setError] = useState("");
 
-  // useEffect(() => {
-  //   getUser(id!).then((u) => {
-  //     setUser(u);
-  //     setFetching(false);
-  //   });
-  // }, [id]);
+  const { data: user } = useUserDetailData(Number(id));
 
   const handleSubmit = async (data: UserFormData) => {
+    console.log("the data is before updating", data);
     setLoading(true);
     setError("");
+    const status = data.status;
     try {
       // strip empty password on edit so it's not overwritten
-      if (!data.password) delete data.password;
-      await updateUser(id!, data);
-      navigate(`/admin/users/${id}`); // back to detail after save
-    } catch {
-      setError("Failed to update user. Please try again.");
+      if (!data.password) {
+        delete data.password;
+        delete data?.address;
+        delete data?.phone;
+        delete data?.status;
+      }
+
+      const result = await editUserAPi(Number(id), {
+        ...data,
+        isActive: status == "active" ? true : false,
+      });
+
+      console.log("the result is ", result);
+      notify.success(`${data.name} updated successfully`);
+
+      navigate(`/admin/users/${id}`);
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.message ||
+          "Failed to update user. Please try again.",
+      );
       setLoading(false);
     }
   };
@@ -71,9 +86,9 @@ export default function EditUserPage() {
             name: user.name,
             email: user.email,
             phone: "2323232323",
-            role: user.role as "user" | "admin" | "moderator" | undefined,
-            status: user.status || "active",
-            address: "fdfdjfdjfm",
+            role: user.role as "USER" | "ADMIN" | undefined,
+            status: user.isActive ? "active" : "inactive",
+            address: "",
           }}
         />
       </div>

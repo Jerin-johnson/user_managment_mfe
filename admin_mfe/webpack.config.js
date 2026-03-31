@@ -4,7 +4,6 @@ const path = require("path");
 
 module.exports = {
   entry: "./src/index.tsx",
-
   mode: "development",
 
   devServer: {
@@ -15,6 +14,12 @@ module.exports = {
     },
     static: {
       directory: path.join(__dirname, "public"),
+    },
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "X-Requested-With, content-type, Authorization",
     },
   },
 
@@ -37,7 +42,7 @@ module.exports = {
   },
 
   output: {
-    publicPath: "http://localhost:3003/",
+    publicPath: "auto", // ← Changed to auto
     clean: true,
   },
 
@@ -45,8 +50,9 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "admin",
       filename: "remoteEntry.js",
+
       remotes: {
-        shared: "shared@http://localhost:3004/remoteEntry.js",
+        shared: "shared@/shared/remoteEntry.js", // ← Changed to relative path
       },
 
       exposes: {
@@ -68,6 +74,7 @@ module.exports = {
           requiredVersion: "6.22.3",
         },
         zustand: { singleton: true },
+        axios: { singleton: true },
       },
     }),
 

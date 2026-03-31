@@ -13,6 +13,12 @@ npm run start&
 cd ..
 
 echo ""
+echo "=== Starting user-app ==="
+cd shared_mfe || exit
+npm run start&
+cd ..
+
+echo ""
 echo "=== Starting Admin_App ==="
 cd admin_mfe || exit
 npm start &

@@ -44,9 +44,9 @@ const router = createBrowserRouter([
   {
     path: "/admin/*",
     element: (
-      // <Suspense fallback={<Loading variant="dots" />}>
-      <AdminRoot />
-      // </Suspense>
+      <Suspense fallback={<Loading variant="dots" />}>
+        <AdminRoot />
+      </Suspense>
     ),
   },
 

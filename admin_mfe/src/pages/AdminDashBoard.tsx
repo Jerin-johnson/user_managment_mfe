@@ -12,37 +12,85 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import { GROWTH_DATA, MOCK_USERS, SIGNUP_DATA } from "../mocks/Mock.User.data";
+import useAuthStore from "shared/useAuthStore";
 import StatCard from "../components/StatCard";
 import CustomTooltip from "../components/CustomTooltip";
+import { useEffect } from "react";
+import { getUserProfileDetails } from "../service/dashboard.api";
+import { useDashboardData } from "../hooks/useDashboardData";
 
-// ── Derived stats ─────────────────────────────────────────────────────────────
-
-const totalUsers = MOCK_USERS.length;
-const adminCount = MOCK_USERS.filter((u) => u.role === "ADMIN").length;
-const modCount = MOCK_USERS.filter((u) => u.role === "MODERATOR").length;
-const userCount = MOCK_USERS.filter((u) => u.role === "USER").length;
-
-const prevMonthUsers = GROWTH_DATA[GROWTH_DATA.length - 2].users;
-const currMonthUsers = GROWTH_DATA[GROWTH_DATA.length - 1].users;
-const growthRate = (
-  ((currMonthUsers - prevMonthUsers) / prevMonthUsers) *
-  100
-).toFixed(1);
-
-const ROLE_DATA = [
-  { name: "Users", value: userCount, color: "#6366f1" },
-  { name: "Admins", value: adminCount, color: "#818cf8" },
-  { name: "Moderators", value: modCount, color: "#c7d2fe" },
-];
-
-const ROLE_COLORS: Record<string, string> = {
-  ADMIN: "text-indigo-400 bg-indigo-500/10",
-  MODERATOR: "text-sky-400 bg-sky-500/10",
-  USER: "text-gray-300 bg-white/5",
+type RoleData = {
+  name: string;
+  value: number;
+  color: string;
 };
 
 export default function DashboardPage() {
+  const { user, setUser } = useAuthStore();
+  const { data, isLoading, isError } = useDashboardData();
+
+  useEffect(() => {
+    async function fetchUserDetails() {
+      try {
+        const result = await getUserProfileDetails();
+        console.log("the feched user details is", result);
+        return result;
+      } catch (error) {
+        console.log("the error is ", error);
+      }
+    }
+
+    if (user?.name === "default") {
+      fetchUserDetails().then((data) => {
+        if (!data) return;
+        console.log("the data is ", data);
+        setUser({
+          email: data.email,
+          name: data.name,
+          role: "ADMIN",
+          avatarUrl: "",
+        });
+      });
+    }
+  }, []);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error loading dashboard</p>;
+  if (!data) return <p>Something went wrong</p>;
+
+  const totalUsers = data.totalUsers;
+  const growthData = data.growthData;
+
+  const roleMap = data.roleStats.reduce((acc: any, curr: any) => {
+    acc[curr.role] = curr.count;
+    return acc;
+  }, {});
+
+  const adminCount = roleMap.ADMIN || 0;
+  const userCount = roleMap.USER || 0;
+  const modCount = roleMap.MODERATOR || 0;
+
+  const ROLE_DATA: RoleData[] = data.roleStats.map((r: any) => ({
+    name: r.role,
+    value: r.count,
+    color:
+      r.role === "ADMIN"
+        ? "#6366f1"
+        : r.role === "USER"
+          ? "#818cf8"
+          : "#c7d2fe",
+  }));
+
+  const prevMonthUsers =
+    data.growthData[data.growthData.length - 2]?.users || 0;
+
+  const currMonthUsers =
+    data.growthData[data.growthData.length - 1]?.users || 0;
+
+  const growthRate =
+    prevMonthUsers === 0
+      ? 0
+      : (((currMonthUsers - prevMonthUsers) / prevMonthUsers) * 100).toFixed(1);
   return (
     <div className="space-y-6 text-white">
       {/* Page title */}
@@ -57,7 +105,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         <StatCard
           label="Total Users"
-          value={currMonthUsers.toLocaleString()}
+          value={totalUsers.toLocaleString()}
           sub="All registered accounts"
           accent="#6366f1"
           icon="👥"
@@ -71,7 +119,7 @@ export default function DashboardPage() {
         />
         <StatCard
           label="New This Week"
-          value={SIGNUP_DATA.reduce((s, d) => s + d.signups, 0)}
+          value={data.signupData.reduce((s, d) => s + d.signups, 0)}
           sub="Daily signups · last 7 days"
           accent="#a78bfa"
           icon="🆕"
@@ -96,7 +144,7 @@ export default function DashboardPage() {
             Total registered users over 6 months
           </p>
           <ResponsiveContainer width="100%" height={220}>
-            <AreaChart data={GROWTH_DATA}>
+            <AreaChart data={growthData}>
               <defs>
                 <linearGradient id="userGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#6366f1" stopOpacity={0.25} />
@@ -192,7 +240,7 @@ export default function DashboardPage() {
         </p>
         <p className="text-xs text-gray-600 mb-4">New accounts per day</p>
         <ResponsiveContainer width="100%" height={160}>
-          <LineChart data={SIGNUP_DATA}>
+          <LineChart data={data.signupData}>
             <CartesianGrid stroke="#ffffff08" vertical={false} />
             <XAxis
               dataKey="day"

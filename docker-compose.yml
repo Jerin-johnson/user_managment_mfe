@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  shell:
+    build:
+      context: ./host_app # Change folder name if different
+    ports:
+      - "3000:80"
+    container_name: shell-host
+
+  shared:
+    build:
+      context: ./shared_mfe
+    ports:
+      - "3004:80"
+    container_name: shared-mfe
+
+  auth:
+    build:
+      context: ./auth_mfe
+    ports:
+      - "3001:80"
+    container_name: auth-mfe
+
+  user:
+    build:
+      context: ./user_mfe
+    ports:
+      - "3002:80"
+    container_name: user-mfe
+
+  admin:
+    build:
+      context: ./admin_mfe
+    ports:
+      - "3003:80"
+    container_name: admin-mfe
+
+networks:
+  default:
+    name: mfe-network

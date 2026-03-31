@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "type": "commonjs",
   "scripts": {
-    "start": "webpack serve --mode development --open",
+    "start": "webpack serve --mode development",
     "build": "webpack --mode production"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.95.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.6.0",
     "react-router-dom": "^6.22.3",
     "zustand": "^5.0.12"
   },

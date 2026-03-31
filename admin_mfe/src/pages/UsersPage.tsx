@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MOCK_USERS } from "../mocks/Mock.User.data";
+import { useUsersData } from "../hooks/useUsersData";
+import { notify } from "../notification/toast";
+import { blockOrUnblockApi } from "../service/user.api";
 
 interface User {
-  id: string | number;
+  _id: string | number;
   name: string;
   email: string;
   role: string;
@@ -12,27 +14,42 @@ interface User {
 }
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[]>(MOCK_USERS);
+  // const [users, setUsers] = useState<User[]>(MOCK_USERS);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   // replace with your actual API call
-  //   fetch("/api/admin/users")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setUsers(data);
-  //       setLoading(false);
-  //     })
-  //     .catch(() => setLoading(false));
-  // }, []);
+  const { data: users, isPending, refetch } = useUsersData();
 
-  const filtered = users.filter(
+  console.log("the data is ", users);
+
+  if (isPending) return <div>Loading</div>;
+  if (!users) return <div>Something went wrong</div>;
+
+  let filtered = users.filter(
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
       u.email.toLowerCase().includes(search.toLowerCase()),
   );
+  async function handleToggleBlockUnBlock(id: number) {
+    console.log("the toggle is invoked", id);
+    const result = await confirm("are you sure");
+
+    if (!result) return;
+
+    try {
+      const result = await blockOrUnblockApi(id);
+      await refetch();
+      notify.success("success");
+    } catch (error: any) {
+      notify.error(
+        error?.response?.data?.message ||
+          error?.message ||
+          "something went wrong",
+      );
+    }
+    console.log("the result is ", result);
+  }
 
   return (
     <div className="space-y-6">
@@ -80,9 +97,9 @@ export default function UsersPage() {
             <tbody className="divide-y divide-white/5">
               {filtered.map((user) => (
                 <tr
-                  key={user.id}
+                  key={user._id}
                   className="bg-[#0f1221] hover:bg-white/5 transition-colors cursor-pointer"
-                  onClick={() => navigate(`/admin/users/${user.id}`)}
+                  onClick={() => navigate(`/admin/users/${user.authUserId}`)}
                 >
                   <td className="px-6 py-4 text-white font-medium">
                     {user.name}
@@ -94,17 +111,17 @@ export default function UsersPage() {
                   <td className="px-6 py-4">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        "active" === "active"
+                        user.isActive
                           ? "bg-green-500/10 text-green-400"
                           : "bg-red-500/10 text-red-400"
                       }`}
                     >
-                      {user.status || "active"}
+                      {user.isActive ? "active" : "inactive"}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-gray-400">
                     {/* {new Date(user?.createdAt).toLocaleDateString()} */}
-                    {new Date().toLocaleDateString()}
+                    {new Date(user.createdAt).toLocaleDateString()}
                   </td>
                   <td
                     className="px-6 py-4"
@@ -112,12 +129,23 @@ export default function UsersPage() {
                   >
                     <button
                       className="text-indigo-400 hover:text-indigo-300 text-xs mr-3"
-                      onClick={() => navigate(`/admin/users/${user.id}`)}
+                      onClick={() =>
+                        navigate(`/admin/users/${user.authUserId}`)
+                      }
                     >
                       View
                     </button>
-                    <button className="text-red-400 hover:text-red-300 text-xs">
-                      Delete
+                    <button
+                      className={`text-xs px-2 py-1 rounded ${
+                        user.isActive
+                          ? "text-red-500 hover:text-red-400"
+                          : "text-green-500 hover:text-green-400"
+                      }`}
+                      onClick={() =>
+                        handleToggleBlockUnBlock(Number(user.authUserId))
+                      }
+                    >
+                      {user.isActive ? "Deactivate" : "Activate"}
                     </button>
                   </td>
                 </tr>

@@ -4,7 +4,6 @@ const path = require("path");
 
 module.exports = {
   entry: "./src/index.tsx",
-
   mode: "development",
 
   devServer: {
@@ -37,7 +36,7 @@ module.exports = {
   },
 
   output: {
-    publicPath: "http://localhost:3004/",
+    publicPath: "auto", // ← Changed
     clean: true,
   },
 

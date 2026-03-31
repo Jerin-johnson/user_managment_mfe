@@ -1,0 +1,2 @@
+kubectl rollout restart deployment/shell deployment/shared deployment/auth deployment/user deployment/admin -n user-management
+kubectl get pods -u user-management

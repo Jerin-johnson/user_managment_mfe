@@ -1,35 +1,50 @@
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../../components/LoginForm";
 import useAuthStore from "shared/useAuthStore";
-// import { loginUser } from '@/services/authService';
+import { loginApi } from "../../services/auth.service";
+import { notify } from "../../notification/toast";
+import toast from "react-hot-toast";
 
 export default function UserLogin() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { setUser } = useAuthStore();
 
   const handleUserLogin = async (data: { email: string; password: string }) => {
     try {
-      // await loginUser(data.email, data.password);
       console.log("User login:", data);
-      setUser({ name: "Jerin Johnson", email: data.email, role: "USER" });
 
-      navigate("/user/dash");
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        if (
-          err.message.includes("401") ||
-          err.message.includes("credentials")
-        ) {
-          alert("Invalid email or password");
-        } else {
-          alert(`Login error: ${err.message}`);
-        }
-      } else {
-        alert("Something went wrong. Please try again.");
+      const result = await toast.promise(loginApi(data.email, data.password), {
+        loading: "Authenticating your account...",
+        success: "User authenticated successfully!",
+        error: (err: any) => {
+          console.log(err?.response?.data);
+          return (
+            err?.response?.data?.message ||
+            err?.message ||
+            "Something went wrong"
+          );
+        },
+      });
+
+      if (result?.user?.role?.toLowerCase() === "admin") {
+        throw new Error("Please use admin login");
+      }
+
+      setTimeout(
+        () =>
+          setUser({
+            name: "default",
+            email: data.email,
+            role: "USER",
+          }),
+        1200,
+      );
+    } catch (err: any) {
+      if (err?.message === "Please use admin login") {
+        notify.error("Please use the Admin Login page");
       }
     }
   };
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-950 sm:px-6 lg:px-8">
       ,<h2>Herer</h2>

@@ -1,27 +1,23 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { getUser, deleteUser } from "../service/api/user";
+// import { getUser, deleteUser } from "../service/api/user";
 import { MOCK_USERS, User } from "../mocks/Mock.User.data";
+import { useUserDetailData } from "../hooks/useUsersData";
 
 export default function UserDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [user, setUser] = useState<User | null>(MOCK_USERS[0]);
+  // const [user, setUser] = useState<User | null>(MOCK_USERS[0]);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  // useEffect(() => {
-  //   getUser(id!).then((u) => {
-  //     setUser(u);
-  //     setLoading(false);
-  //   });
-  // }, [id]);
+  const { data: user } = useUserDetailData(Number(id));
 
   const handleDelete = async () => {
     if (!confirm(`Delete ${user?.name}? This cannot be undone.`)) return;
     setDeleting(true);
-    await deleteUser(id!);
+    // await deleteUser(id!);
     navigate("/admin/users");
   };
 
@@ -82,12 +78,12 @@ export default function UserDetailPage() {
               <span className="text-gray-600">•</span>
               <span
                 className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                  user.status === "active"
+                  user.isActive
                     ? "bg-green-500/10 text-green-400"
                     : "bg-red-500/10 text-red-400"
                 }`}
               >
-                {user.status}
+                {user.isActive ? "active" : "deactive"}
               </span>
             </div>
           </div>
@@ -98,10 +94,10 @@ export default function UserDetailPage() {
           <InfoRow label="Email" value={user.email} />
           {/* <InfoRow label="Phone" value={user.phone} />
           <InfoRow label="Address" value={user.address ?? ""} /> */}
-          {/* <InfoRow
+          <InfoRow
             label="Joined"
             value={new Date(user.createdAt).toLocaleDateString()}
-          /> */}
+          />
         </div>
       </div>
     </div>

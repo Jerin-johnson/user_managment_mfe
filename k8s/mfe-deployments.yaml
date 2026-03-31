@@ -1,0 +1,182 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shell
+  namespace: user-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shell
+  template:
+    metadata:
+      labels:
+        app: shell
+    spec:
+      containers:
+        - name: shell
+          image: jerinirowz/shell:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shell-service
+  namespace: user-management
+spec:
+  selector:
+    app: shell
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP
+
+---
+# ====================== AUTH FRONTEND ======================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: user-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: jerinirowz/auth:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-frontend-service
+  namespace: user-management
+spec:
+  selector:
+    app: auth
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP
+
+---
+# ====================== USER FRONTEND ======================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+  namespace: user-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+        - name: user
+          image: jerinirowz/user:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-frontend-service
+  namespace: user-management
+spec:
+  selector:
+    app: user
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP
+
+---
+# ====================== ADMIN ======================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin
+  namespace: user-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin
+  template:
+    metadata:
+      labels:
+        app: admin
+    spec:
+      containers:
+        - name: admin
+          image: jerinirowz/admin:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-service
+  namespace: user-management
+spec:
+  selector:
+    app: admin
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP
+
+---
+# ====================== SHARED ======================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shared
+  namespace: user-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shared
+  template:
+    metadata:
+      labels:
+        app: shared
+    spec:
+      containers:
+        - name: shared
+          image: jerinirowz/shared:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shared-service
+  namespace: user-management
+spec:
+  selector:
+    app: shared
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP

@@ -13,9 +13,9 @@ export interface User {
 export interface UserFormData {
   name: string;
   email: string;
-  phone: string;
-  role: "admin" | "moderator" | "user";
-  status: "active" | "inactive";
-  address: string;
+  phone?: string;
+  role: "ADMIN" | "USER";
+  status?: "active" | "inactive";
+  address?: string;
   password?: string;
 }
